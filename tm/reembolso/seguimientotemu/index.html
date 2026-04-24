@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Suivi - Livraisons TEMU</title>
+  <title>Seguimiento - Entregas TEMU</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -123,13 +123,13 @@
 <body>
 
   <header>
-    <h1>TEMU • Suivi de commande</h1>
+    <h1>TEMU • Seguimiento de pedido</h1>
   </header>
 
   <div class="container">
-    <h2>Entrez votre numéro de suivi :</h2>
-    <input type="text" id="codigo" placeholder="Ex : SHN458239817BR" />
-    <button onclick="rastrear()">Suivre la commande</button>
+    <h2>Ingresa tu número de seguimiento:</h2>
+    <input type="text" id="codigo" placeholder="Ej: SHN458239817BR" />
+    <button onclick="rastrear()">Rastrear pedido</button>
 
     <div id="resultado"></div>
 
@@ -145,11 +145,11 @@
     .then(data => {
       ciudad = data.city;
       estado = data.region;
-      document.getElementById("userLocation").innerText = "Localisation détectée.";
+      document.getElementById("userLocation").innerText = "Ubicación detectada.";
       document.getElementById("mapFrame").src = `https://maps.google.com/maps?q=${ciudad}%20${estado}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
     })
     .catch(() => {
-      document.getElementById("userLocation").innerText = "Localisation non identifiée.";
+      document.getElementById("userLocation").innerText = "Ubicación no identificada.";
     });
 
   function solicitarPermissaoNotificacao() {
@@ -170,7 +170,7 @@
     const resultado = document.getElementById("resultado");
     const mapa = document.getElementById("mapa");
     if (!codigo) {
-      resultado.innerHTML = "<p style='color:red;'>Veuillez entrer un numéro de suivi valide.</p>";
+      resultado.innerHTML = "<p style='color:red;'>Por favor, ingresa un número de seguimiento válido.</p>";
       return;
     }
     mapa.style.display = 'block';
@@ -183,12 +183,12 @@
     const porcentajeEntrega = Math.min(100, Math.floor((diasDesdeCompra / 30) * 100));
 
     const etapas = [
-      { dias: 0, local: 'Chine', texto: 'Commande confirmée par TEMU.' },
-      { dias: 6, local: 'En transit', texto: 'Colis expédié vers le centre de distribution.' },
-      { dias: 12, local: 'Douane', texto: 'Inspection et dédouanement international.' },
-      { dias: 18, local: 'Distribution régionale', texto: 'Envoyé au centre de distribution local.' },
-      { dias: 24, local: 'Dernier kilomètre', texto: 'En route vers la destination finale.' },
-      { dias: 30, local: 'Livré', texto: `La commande a été livrée avec succès à ${ciudad}, ${estado}.` }
+      { dias: 0,  local: 'China',                  texto: 'Pedido confirmado por TEMU.' },
+      { dias: 6,  local: 'En tránsito',             texto: 'Paquete enviado al centro de distribución.' },
+      { dias: 12, local: 'Aduana',                  texto: 'Inspección y despacho aduanero internacional.' },
+      { dias: 18, local: 'Distribución regional',   texto: 'Enviado al centro de distribución local.' },
+      { dias: 24, local: 'Último kilómetro',        texto: 'En camino hacia el destino final.' },
+      { dias: 30, local: 'Entregado',               texto: `El pedido fue entregado exitosamente en ${ciudad}, ${estado}.` }
     ];
 
     const timeline = [];
@@ -200,14 +200,14 @@
       if (hoy >= fechaEtapa) {
         timeline.push(
           `<div class="event">
-            <strong>${fechaEtapa.toLocaleDateString('fr-FR', op)} - ${etapa.local}</strong>
+            <strong>${fechaEtapa.toLocaleDateString('es-ES', op)} - ${etapa.local}</strong>
             <span style="color: green; font-weight: bold;">✔</span> ${etapa.texto}
           </div>`
         );
       } else {
         timeline.push(
           `<div class="event" style="opacity: 0.4;">
-            <strong>${fechaEtapa.toLocaleDateString('fr-FR', op)} - ${etapa.local}</strong>
+            <strong>${fechaEtapa.toLocaleDateString('es-ES', op)} - ${etapa.local}</strong>
             <span style="color: gray;">⏳</span> ${etapa.texto}
           </div>`
         );
@@ -216,28 +216,28 @@
 
     resultado.innerHTML = `
       <div class="success">
-        Code <strong>${codigo}</strong> localisé avec succès. Votre commande est en route vers <strong>${ciudad}, ${estado}</strong>.
+        Código <strong>${codigo}</strong> localizado con éxito. Tu pedido está en camino hacia <strong>${ciudad}, ${estado}</strong>.
       </div>
       <div class="pedido-info">
-        <strong>📦 Détails de la commande</strong><br>
-        Commande n° : #1248819<br>
-        Produit : Vêtements + Accessoires + Chaussures + Sacs + Électronique<br>
-        Total : 0,00 $ Produits gratuits<br>
-        Date d'achat : ${fechaCompra.toLocaleDateString('fr-FR', op)}<br>
-        Méthode d'expédition : Livraison standard (jusqu'à 30 jours)
+        <strong>📦 Detalles del pedido</strong><br>
+        Número de pedido: #1248819<br>
+        Producto: Ropa + Accesorios + Calzado + Bolsos + Electrónica<br>
+        Total: $0,00 Productos gratuitos<br>
+        Fecha de compra: ${fechaCompra.toLocaleDateString('es-ES', op)}<br>
+        Método de envío: Entrega estándar (hasta 30 días)
       </div>
       <div style="margin: 20px 0;">
-        <label><strong>📊 Progression de la livraison :</strong></label>
+        <label><strong>📊 Progreso de la entrega:</strong></label>
         <div class="progress-bar">
           <div class="progress-fill" style="width: ${porcentajeEntrega}%"></div>
         </div>
-        <small>${porcentajeEntrega}% du parcours effectué</small>
+        <small>${porcentajeEntrega}% del recorrido completado</small>
       </div>
       <div class="timeline">
         ${timeline.join('')}
       </div>
       <div class="produto-img">
-        <strong>🎁 Voir les produits envoyés à votre domicile 🎁 - Vos récompenses :</strong>
+        <strong>🎁 Ver los productos enviados a tu domicilio 🎁 - Tus recompensas:</strong>
         <div class="produto-img-grid">
           <img src="https://i.pinimg.com/736x/31/45/3d/31453dc3c8999067684833a20e9ff6b3.jpg">
           <img src="https://i.pinimg.com/736x/24/57/99/2457991b02ad3bd42f3debaa46d8f82f.jpg">
@@ -249,7 +249,7 @@
       </div>
     `;
 
-    enviarNotificacao("📦 Commande suivie", `Votre commande est en route vers ${ciudad}. Merci pour votre achat sur TEMU !`);
+    enviarNotificacao("📦 Pedido rastreado", `Tu pedido está en camino hacia ${ciudad}. ¡Gracias por tu compra en TEMU!`);
   }
   </script>
 
